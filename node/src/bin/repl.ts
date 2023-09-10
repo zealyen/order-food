@@ -1,15 +1,23 @@
+
 // must import first
+import _ from 'lodash'
 import 'module-alias/register'
 import 'reflect-metadata'
-import { getenv } from '@/lib/dotenv'
-
-import _ from 'lodash'
 import { createLoggerByFilename } from '@/lib/logger'
+import { getenv } from '@/lib/dotenv'
+import { isReady as isMysqlReady, close as closeMysql, start as startMysql } from '@/lib/mysql'
+import { isReady as isRedisReady, close as closeRedis, start as startRedis } from '@/lib/redis'
 import Repl from 'repl'
 
 const logger = createLoggerByFilename(__filename)
 
 ;(async () => {
+  void startMysql()
+  void startRedis()
+
+  await Promise.all([isMysqlReady, isRedisReady])
+    .catch(err => { throw _.set(new Error('failed to init mysql and redis'), 'originalError', err) })
+
   const repl = Repl.start({
     breakEvalOnSigint: true,
     ignoreUndefined: true,
@@ -26,7 +34,7 @@ const logger = createLoggerByFilename(__filename)
   })
 
   await new Promise(resolve => repl.on('exit', resolve))
-//   logger('Received "exit" event from repl')
-//   await Promise.all([closeMysql(), closeRedis()])
-//     .catch(err => { throw _.set(new Error('failed to close mysql and redis'), 'originalError', err) })
+  logger('Received "exit" event from repl')
+  await Promise.all([closeMysql(), closeRedis()])
+    .catch(err => { throw _.set(new Error('failed to close mysql and redis'), 'originalError', err) })
 })().catch(logger)

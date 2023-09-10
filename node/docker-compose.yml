@@ -1,5 +1,5 @@
 services:
-  mysql:
+  mysql-order:
     # https://hub.docker.com/_/mysql
     image: mysql:8
     init: true
@@ -15,7 +15,7 @@ services:
       MYSQL_ROOT_PASSWORD: "${DOCKER_MYSQL_ROOT_PASSWORD}"
       MYSQL_USER: "${DOCKER_MYSQL_USER}"
     ports:
-      - "${DOCKER_MYSQL_3306}:3306"
+      - "${DOCKER_MYSQL_3307}:3306"
     volumes:
       - "${DOCKER_DATA}/mysql:/var/lib/mysql:rw"
     healthcheck:
@@ -24,7 +24,7 @@ services:
       timeout: 20s
       retries: 5
       start_period: 30s
-  redis:
+  redis-order:
     # https://hub.docker.com/_/redis
     # https://github.com/redis/redis/blob/7.0/redis.conf
     image: redis:7-alpine
@@ -32,7 +32,7 @@ services:
     restart: always
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
-      - "${DOCKER_REDIS_6379}:6379"
+      - "${DOCKER_REDIS_6380}:6379"
     volumes:
       - "${DOCKER_DATA}/redis:/data:rw"
       - ./docker/redis-dev/redis.conf:/usr/local/etc/redis/redis.conf:ro
