@@ -17,7 +17,7 @@ export const mysql = new DataSource({
   username: getenv('MYSQL_USER', 'root'),
   charset: 'utf8mb4_0900_ai_ci',
   timezone: getenv('MYSQL_TIMEZONE', 'Z'),
-
+  legacySpatialSupport: false,
   // 可透過修改 `MYSQL_LOGGING=true` 來開啟 mysql 的 log, see https://typeorm.io/logging#changing-default-logger
   ...(getenvJson5('MYSQL_LOGGING', false) === false ? {} : {
     logging: true,

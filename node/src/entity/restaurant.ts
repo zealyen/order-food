@@ -1,5 +1,10 @@
-import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
-import { Geometry } from 'geojson'
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, Index } from 'typeorm'
+import { Menu, Order } from '@/entity'
+
+export class GPSPointInput {
+  x: number
+  y: number
+}
 
 @Entity('Restaurants')
 export class Restaurant extends BaseEntity {
@@ -9,8 +14,9 @@ export class Restaurant extends BaseEntity {
   @Column({ type: 'varchar', length: '127', nullable: false })
     name: string
 
-  @Column({ type: 'point', nullable: false })
-    geolocation: Geometry
+  @Column({ type: 'point', spatialFeatureType: 'Point', srid: 4326, nullable: false })
+  @Index('geolocation', { spatial: true })
+    geolocation: GPSPointInput
 
   @CreateDateColumn()
     createdAt: Date
@@ -20,4 +26,10 @@ export class Restaurant extends BaseEntity {
 
   @DeleteDateColumn()
     deletedAt: Date
+
+  @OneToMany(() => Menu, menu => menu.restaurant)
+    menus: Menu[] | null
+
+  @OneToMany(() => Order, order => order.restaurant)
+    orders: Order[] | null
 }

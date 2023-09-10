@@ -8,6 +8,8 @@ export class Restaurants1694318658723 implements MigrationInterface {
         {
           name: 'id',
           isPrimary: true,
+          isGenerated: true,
+          generationStrategy: 'increment',
           type: 'int',
         },
         {

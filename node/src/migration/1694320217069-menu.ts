@@ -8,6 +8,8 @@ export class Menu1694320217069 implements MigrationInterface {
         {
           name: 'id',
           isPrimary: true,
+          isGenerated: true,
+          generationStrategy: 'increment',
           type: 'int',
         },
         {

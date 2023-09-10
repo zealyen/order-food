@@ -8,6 +8,8 @@ export class OrderDetail1694322887801 implements MigrationInterface {
         {
           name: 'id',
           isPrimary: true,
+          isGenerated: true,
+          generationStrategy: 'increment',
           type: 'int',
         },
         {
