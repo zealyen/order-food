@@ -21,7 +21,6 @@
     "body-parser": "^1.20.1",
     "bullmq": "^3.12.0",
     "class-validator": "^0.14.0",
-    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dataloader": "^2.2.2",
     "dayjs": "^1.11.8",
@@ -89,6 +88,7 @@
     "typeorm:migration": "yarn compile && yarn typeorm:migration:ci",
     "typeorm:revert": "yarn compile && node ./dist/bin/typeormRevert.js",
     "seeder:ci": "node ./dist/seeder/index.js",
-    "seeder": "yarn compile && yarn seeder:ci"
+    "seeder": "yarn compile && yarn seeder:ci",
+    "start": "yarn compile && node ./dist/index.js"
   }
 }

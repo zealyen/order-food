@@ -23,6 +23,4 @@ export function getSiteurl (path: string = '/'): string {
   return new URL(path, getenv('BASEURL', `http://localhost:${getPort()}`)).href
 }
 
-export const isDevelopment = getenv('NODE_ENV', 'development') === 'development'
-
-export const isProduction = getenv('NODE_ENV', 'development') === 'production'
+export const isDevelopment = getenv('NODE_ENV', 'dev') === 'dev'

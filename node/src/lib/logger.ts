@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { isDevelopment, isProduction } from '@/lib/dotenv'
+import { isDevelopment } from '@/lib/dotenv'
 import { type ApolloServerPlugin, type BaseContext } from '@apollo/server'
 import { type Logger as ApolloLogger } from '@apollo/utils.logger'
 import debug from 'debug'
@@ -93,7 +93,6 @@ export function createApolloAccessLoggingPlugin<T extends BaseContext> (prefix: 
     const logger = createLogger(`${prefix}/${eventName}`)
     return async (reqCtx): Promise<void> => {
       // 忽略 Apollo Sandbox 的 introspection query
-      if (!isProduction && /^\s*query IntrospectionQuery \{/.test(reqCtx.source ?? '')) return
       const tmp: any = apolloReqCtxToJson(reqCtx)
       if (_.hasIn(reqCtx, 'errors')) tmp.errors = _.map(reqCtx.errors, errToJson)
       logger({ reqCtx: tmp })
