@@ -8,7 +8,6 @@ import { createLoggerByFilename, createMorganLogger } from '@/lib/logger'
 import { createServer } from 'http'
 import { isReady as isMysqlReady, mysql, start as startMysql, close as closeMysql } from '@/lib/mysql'
 import { isReady as isRedisReady, start as startRedis, close as closeRedis } from '@/lib/redis'
-import { type WebSocketServer } from 'ws'
 import express from 'express'
 import webAPI, { close as closeWebAPI } from '@/webAPI/index'
 import { start as startWorker, close as closeWorker } from '@/service/worker'
@@ -34,23 +33,12 @@ const logger = createLoggerByFilename(__filename)
 
     const app = express()
     const httpServer = createServer(app)
-    const wsServers = new Map<string, WebSocketServer>()
 
     await Promise.all([ // init all graphql servers
-      webAPI({ app, httpServer, wsServers }),
+      webAPI({ app, httpServer }),
     ])
 
     app.use(createMorganLogger('morgan', isDevelopment ? 'dev' : 'combined'))
-
-    // handle multi websocket server
-    httpServer.on('upgrade', (request, socket, head) => {
-      const pathname = new URL(request.url ?? '/', 'http://localhost').pathname
-      if (!wsServers.has(pathname)) return socket.destroy()
-      const wsServer = wsServers.get(pathname) as WebSocketServer
-      wsServer.handleUpgrade(request, socket, head, (client) => {
-        wsServer.emit('connection', client, request)
-      })
-    })
 
     await new Promise<void>(resolve => httpServer.listen({ port: getPort() }, resolve))
 
