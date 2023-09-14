@@ -1,6 +1,12 @@
-import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import { OrderStatus } from '@/enum/order'
-import { OrderDetail, Restaurant } from '@/entity'
+import { Restaurant } from '@/entity'
+
+export interface OrderDetail {
+  productName: string
+  quantity: number
+  price: number
+}
 
 @Entity('Orders')
 export class Order extends BaseEntity {
@@ -38,6 +44,9 @@ export class Order extends BaseEntity {
   @Column({ type: 'varchar', length: '127', nullable: true })
     deliveryName: string
 
+  @Column({ type: 'simple-json', nullable: true })
+    details: OrderDetail[]
+
   @CreateDateColumn()
     createdAt: Date
 
@@ -46,7 +55,4 @@ export class Order extends BaseEntity {
 
   @DeleteDateColumn()
     deletedAt: Date
-
-  @OneToMany(() => OrderDetail, detail => detail.order)
-    orderDetails: OrderDetail[] | null
 }

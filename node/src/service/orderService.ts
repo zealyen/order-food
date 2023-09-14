@@ -13,6 +13,16 @@ const ADVANCE_THRESHOLD = 5
 const EXTEND_AMOUNT = 10
 
 export class OrderService {
+  async getOrder (orderNumber: string, trace: Record<string, any>): Promise<Order> {
+    logger({ fn: 'OrderService.getOrder', orderNumber, trace })
+
+    try {
+      return await mysql.getRepository(Order).findOneOrFail({ where: { orderNumber } })
+    } catch (error) {
+      throw _.merge(error, { fn: 'OrderService.getOrder', orderNumber, trace })
+    }
+  }
+
   async createOrder (): Promise<void> {
 
   }

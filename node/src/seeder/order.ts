@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { mysql } from '@/lib/mysql'
-import { Order, OrderDetail, StoreBrand } from '@/entity'
+import { Order, StoreBrand } from '@/entity'
 import { OrderStatus } from '@/enum/order'
 
 export default async function seeder (): Promise<void> {
@@ -19,18 +19,16 @@ export default async function seeder (): Promise<void> {
       userGeolocation: 'POINT(25053192 121607035)',
       deliveryPhone: '0987654321',
       deliveryName: 'Tom',
+      details: JSON.stringify(_.map(kfcMenus, menu => ({
+        productName: menu.productName,
+        quantity: 1,
+        price: menu.price,
+      }))),
     })
 
-    const insertOrder = await mysql.manager.save(Order, order)
-
-    const orderDetails = _.map(kfcMenus, menu => _.merge(new OrderDetail(), {
-      orderId: _.toSafeInteger(insertOrder.id),
-      menuId: _.toSafeInteger(menu.id),
-      quantity: 1,
-    }))
-
-    await mysql.manager.save(OrderDetail, orderDetails)
+    await mysql.manager.save(Order, order)
   } catch (error) {
+    console.log(error)
     throw _.merge(error, { message: 'Seeder order failed.' })
   }
 }

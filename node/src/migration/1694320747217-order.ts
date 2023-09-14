@@ -65,6 +65,11 @@ export class Order1694320747217 implements MigrationInterface {
           isNullable: true,
         },
         {
+          name: 'details',
+          type: 'json',
+          isNullable: true,
+        },
+        {
           name: 'createdAt',
           type: 'timestamp',
           default: 'CURRENT_TIMESTAMP',

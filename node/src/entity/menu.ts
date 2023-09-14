@@ -27,7 +27,4 @@ export class Menu extends BaseEntity {
 
   @DeleteDateColumn()
     deletedAt: Date
-
-  @OneToMany(() => OrderDetail, detail => detail.order)
-    orderDetails: OrderDetail[] | null
 }

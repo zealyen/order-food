@@ -1,12 +1,14 @@
 import _ from 'lodash'
 import { restaurantService } from '@/service/restaurantService'
 import * as wkx from 'wkx'
+import type WebAPIContext from '@/webAPI/context'
 
 export const typeDefs = `#graphql
     type Restaurant {
         id: ID!
         name: String!
         geolocation: Geolocation!
+        storeBrand: StoreBrand!
     }
 
     type Geolocation {
@@ -30,7 +32,7 @@ export const typeDefs = `#graphql
     }
 
     type RestaurantQuery {
-        restaurants: RestaurantConnection
+        restaurants: RestaurantConnection!
     }
 `
 
@@ -44,6 +46,9 @@ export const resolvers = {
     },
   },
   Restaurant: {
-    geolocation: (parent) => _.pick(wkx.Geometry.parse(parent.geolocation), ['x', 'y']),
+    geolocation: (parent, args) => _.pick(wkx.Geometry.parse(parent.geolocation), ['x', 'y']),
+    storeBrand: async (parent, args, context: WebAPIContext) => {
+      return await context.dataSources.dsMysql.getStoreBrandById(parent.storeBrandId)
+    },
   },
 }
