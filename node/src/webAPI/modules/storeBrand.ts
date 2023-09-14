@@ -31,6 +31,9 @@ export const typeDefs = `#graphql
     }
 
     extend type Query {
+      """
+      - 查詢所有品牌商家
+      """
       StoreBrandQuery: StoreBrandQuery!
     } 
 `

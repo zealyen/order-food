@@ -1,23 +1,21 @@
 #!/bin/bash
 
-# cd node
+cd node
 
-# ls -la
+ls -la
 
-# yarn
+yarn
 
-# docker compose up -d
+docker compose up -d
 
 
-# while ! docker exec node-mysql-order-1  mysql --user=root --password=docker -e "SELECT 1" >/dev/null 2>&1; do
-#     echo "Waiting for database connection..."
-#     sleep 1
-# done
+while ! docker exec node-mysql-order-1  mysql --user=root --password=docker -e "SELECT 1" >/dev/null 2>&1; do
+    echo "Waiting for database connection..."
+    sleep 1
+done
 
-# yarn typeorm:migration
+yarn typeorm:migration
 
-# yarn seeder
+yarn seeder
 
-# yarn start
-
-gnome-open https://www.baeldung.com/linux
+yarn start

@@ -5,34 +5,37 @@ import type WebAPIContext from '@/webAPI/context'
 
 export const typeDefs = `#graphql
     type Restaurant {
-        id: ID!
-        name: String!
-        geolocation: Geolocation!
-        storeBrand: StoreBrand!
+      id: ID!
+      name: String!
+      geolocation: Geolocation!
+      storeBrand: StoreBrand!
     }
 
     type Geolocation {
-        x: Float!
-        y: Float!
+      x: Float!
+      y: Float!
     }
 
     type RestaurantEdge {
-        cursor: ID!
-        node: Restaurant!
+      cursor: ID!
+      node: Restaurant!
     }
 
     type RestaurantConnection {
-        edges: [RestaurantEdge!]!
-        pageInfo: PageInfo!
-        totalCount: Int!
+      edges: [RestaurantEdge!]!
+      pageInfo: PageInfo!
+      totalCount: Int!
     }
 
     extend type Query {
-        RestaurantQuery: RestaurantQuery!
+      RestaurantQuery: RestaurantQuery!
     }
 
     type RestaurantQuery {
-        restaurants: RestaurantConnection!
+      """
+      - 查詢所有餐廳
+      """
+      restaurants: RestaurantConnection!
     }
 `
 
