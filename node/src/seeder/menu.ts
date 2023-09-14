@@ -1,4 +1,4 @@
-import { Menu, Restaurant } from '@/entity'
+import { Menu, Restaurant, StoreBrand } from '@/entity'
 import { mysql } from '@/lib/mysql'
 import _ from 'lodash'
 
@@ -66,10 +66,10 @@ export const mcdonaldsMenus = [
 
 export default async function seeder (): Promise<void> {
   try {
-    const restaurants = await mysql.getRepository(Restaurant).find()
+    const storeBrands = await mysql.getRepository(StoreBrand).find()
     const menus: Menu[] = []
-    for (const restaurant of restaurants) {
-      menus.push(..._.map((/^[KFC]{3}/.test(restaurant.name) ? kfcMenus : mcdonaldsMenus), menu => _.merge(new Menu(), menu, { restaurantId: restaurant.id })))
+    for (const storeBrand of storeBrands) {
+      menus.push(..._.map((/^[KFC]{3}/.test(storeBrand.name) ? kfcMenus : mcdonaldsMenus), menu => _.merge(new Menu(), menu, { storeBrandId: storeBrand.id })))
     }
 
     await mysql.manager.save(Menu, menus)

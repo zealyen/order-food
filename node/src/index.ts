@@ -11,7 +11,7 @@ import { isReady as isRedisReady, start as startRedis, close as closeRedis } fro
 import { type WebSocketServer } from 'ws'
 import express from 'express'
 import webAPI, { close as closeWebAPI } from '@/webAPI/index'
-// import { start as startWorker, close as closeWorker } from '@/serv/worker'
+import { start as startWorker, close as closeWorker } from '@/service/worker'
 
 const logger = createLoggerByFilename(__filename)
 
@@ -30,7 +30,7 @@ const logger = createLoggerByFilename(__filename)
       isRedisReady,
     ])
 
-    // await startWorker()
+    await startWorker()
 
     const app = express()
     const httpServer = createServer(app)
@@ -58,7 +58,7 @@ const logger = createLoggerByFilename(__filename)
       try {
         logger('🛑 Closing gracefully...')
         await closeWebAPI()
-        // await closeWorker()
+        await closeWorker()
         await new Promise(resolve => { httpServer.close(resolve) })
         await Promise.all([closeMysql(), closeRedis()])
         process.kill(process.pid, signal)

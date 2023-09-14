@@ -1,4 +1,4 @@
-import { Table, type MigrationInterface, type QueryRunner } from 'typeorm'
+import { Table, type MigrationInterface, type QueryRunner, TableIndex, TableForeignKey } from 'typeorm'
 
 export class Restaurants1694318658723 implements MigrationInterface {
   public async up (queryRunner: QueryRunner): Promise<void> {
@@ -11,6 +11,11 @@ export class Restaurants1694318658723 implements MigrationInterface {
           isGenerated: true,
           generationStrategy: 'increment',
           type: 'int',
+        },
+        {
+          name: 'storeBrandId',
+          type: 'int',
+          isNullable: false,
         },
         {
           name: 'name',
@@ -40,6 +45,21 @@ export class Restaurants1694318658723 implements MigrationInterface {
           isNullable: true,
         },
       ],
+    }))
+
+    await queryRunner.createIndex(
+      'Restaurants',
+      new TableIndex({
+        columnNames: ['storeBrandId'],
+        name: 'index_restaurant_storeBrandId',
+      })
+    )
+
+    await queryRunner.createForeignKey('Restaurants', new TableForeignKey({
+      name: 'fk_restaurant_storeBrandId',
+      columnNames: ['storeBrandId'],
+      referencedColumnNames: ['id'],
+      referencedTableName: 'StoreBrands',
     }))
   }
 

@@ -16,7 +16,6 @@ export const resolvers = {
   Query: {
     _: () => true,
   },
-
   Subscription: {
     _: {
       async * subscribe () {

@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import { isDevelopment } from '@/lib/dotenv'
 import { type ApolloServerPlugin, type BaseContext } from '@apollo/server'
 import { type Logger as ApolloLogger } from '@apollo/utils.logger'
 import debug from 'debug'
@@ -28,17 +27,10 @@ const jsonStringify = (obj: object): string => {
 }
 
 export function createLogger (logName: string): (arg0: any) => void {
-  if (isDevelopment) { // development only
-    const debugLogger = debug(`app:${logName}`)
-    return msg => {
-      if (msg instanceof Error) msg = errToJson(msg)
-      _.isString(msg) ? debugLogger(_.trim(msg)) : debugLogger(jsonStringify(msg))
-    }
-  }
+  const debugLogger = debug(`app:${logName}`)
   return msg => {
-    if (msg instanceof Error) msg = { ...errToJson(msg), logType: 'error' }
-    if (_.isString(msg)) msg = { message: _.trim(msg), logType: 'string' }
-    console.log(jsonStringify({ logName, logType: 'json', ...msg }))
+    if (msg instanceof Error) msg = errToJson(msg)
+    _.isString(msg) ? debugLogger(_.trim(msg)) : debugLogger(jsonStringify(msg))
   }
 }
 
@@ -93,6 +85,7 @@ export function createApolloAccessLoggingPlugin<T extends BaseContext> (prefix: 
     const logger = createLogger(`${prefix}/${eventName}`)
     return async (reqCtx): Promise<void> => {
       // 忽略 Apollo Sandbox 的 introspection query
+      if (/^\s*query IntrospectionQuery \{/.test(reqCtx.source ?? '')) return
       const tmp: any = apolloReqCtxToJson(reqCtx)
       if (_.hasIn(reqCtx, 'errors')) tmp.errors = _.map(reqCtx.errors, errToJson)
       logger({ reqCtx: tmp })

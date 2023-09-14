@@ -1,5 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, Index } from 'typeorm'
-import { Menu, Order } from '@/entity'
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, Index, ManyToOne } from 'typeorm'
+import { Order, StoreBrand } from '@/entity'
 
 export class GPSPointInput {
   x: number
@@ -14,6 +14,9 @@ export class Restaurant extends BaseEntity {
   @Column({ type: 'varchar', length: '127', nullable: false })
     name: string
 
+  @Column({ type: 'int', nullable: false })
+    storeBrandId: number
+
   @Column({ type: 'point', spatialFeatureType: 'Point', srid: 4326, nullable: false })
   @Index('geolocation', { spatial: true })
     geolocation: GPSPointInput
@@ -27,8 +30,8 @@ export class Restaurant extends BaseEntity {
   @DeleteDateColumn()
     deletedAt: Date
 
-  @OneToMany(() => Menu, menu => menu.restaurant)
-    menus: Menu[] | null
+  @ManyToOne(() => StoreBrand, storeBrand => storeBrand.restaurants)
+    storeBrand: StoreBrand
 
   @OneToMany(() => Order, order => order.restaurant)
     orders: Order[] | null

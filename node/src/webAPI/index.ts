@@ -12,15 +12,18 @@ import { randomBase62 } from '@/lib/helper'
 import { useServer } from 'graphql-ws/lib/use/ws'
 import { WebSocketServer } from 'ws'
 import * as moduleIndex from '@/webAPI/modules/index'
+import * as pageInfo from '@/lib/pagination'
+import * as restaurant from '@/webAPI/modules/restaurant'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import type WebAPIContext from '@/webAPI/context'
 
 const logger = createLoggerByFilename(__filename)
 
-// 在此定義 modules
 const modules = [
-  moduleIndex, // index 必須放在第一個
+  moduleIndex,
+  pageInfo,
+  restaurant,
 ]
 
 let server: ApolloServer<WebAPIContext>
@@ -53,6 +56,7 @@ export default async function init ({ app, httpServer, wsServers }): Promise<voi
     server = new ApolloServer<WebAPIContext>({
       schema,
       logger: createApolloLogger(httpPath.slice(1)),
+      introspection: false,
       plugins: [
         // Proper shutdown for the HTTP server.
         ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -68,7 +72,6 @@ export default async function init ({ app, httpServer, wsServers }): Promise<voi
           },
         },
 
-        // Access logging
         createApolloAccessLoggingPlugin(httpPath.slice(1)),
       ],
     })

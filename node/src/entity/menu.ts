@@ -1,5 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
-import { OrderDetail, Restaurant } from '@/entity'
+import { OrderDetail, StoreBrand } from '@/entity'
 
 @Entity('Menus')
 export class Menu extends BaseEntity {
@@ -13,11 +13,11 @@ export class Menu extends BaseEntity {
     price: number
 
   @Column({ type: 'int', nullable: false })
-    restaurantId: number
+    storeBrandId: number
 
-  @ManyToOne(() => Restaurant, restaurant => restaurant.menus)
-  @JoinColumn({ name: 'restaurantId', referencedColumnName: 'id' })
-    restaurant: Restaurant
+  @ManyToOne(() => StoreBrand, storeBrand => storeBrand.menus)
+  @JoinColumn({ name: 'storeBrandId', referencedColumnName: 'id' })
+    storeBrand: StoreBrand
 
   @CreateDateColumn()
     createdAt: Date
