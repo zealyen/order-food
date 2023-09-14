@@ -23,10 +23,13 @@ export class Restaurants1694318658723 implements MigrationInterface {
           length: '127',
           isNullable: false,
         },
+        // https://dev.mysql.com/doc/refman/8.0/en/creating-spatial-indexes.html
         {
           name: 'geolocation',
           type: 'point',
           isNullable: false,
+          srid: 4326,
+          spatialFeatureType: 'Point',
         },
         {
           name: 'createdAt',

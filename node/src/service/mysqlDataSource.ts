@@ -2,12 +2,11 @@ import _ from 'lodash'
 import { In, type Repository } from 'typeorm'
 import { mysql } from '@/lib/mysql'
 import DataLoader from 'dataloader'
-import { Menu, Order, Restaurant, StoreBrand } from '@/entity'
+import { Menu, Restaurant, StoreBrand } from '@/entity'
 
 const storeBrandRepo: Repository<StoreBrand> = mysql.getRepository(StoreBrand)
 const restaurantRepo: Repository<Restaurant> = mysql.getRepository(Restaurant)
 const menuRepo: Repository<Menu> = mysql.getRepository(Menu)
-const orderRepo: Repository<Order> = mysql.getRepository(Order)
 
 export class MysqlDataSource {
   private orderByIds<T> (items: T[], ids: Array<number | string>, key: string = 'id'): Array<T | undefined> {
@@ -46,5 +45,15 @@ export class MysqlDataSource {
 
   async getRestaurantById (id: number): Promise<Restaurant | undefined> {
     return await this.loadRestaurant.load(id)
+  }
+
+  private readonly loadMenu = new DataLoader(async (ids: number[]) => {
+    const menus = await menuRepo.findBy({ storeBrandId: In(ids) })
+    const group = _.groupBy(menus, 'storeBrandId')
+    return _.map(ids, id => group[id] ?? [])
+  })
+
+  async getMenuByStoreBrandId (id: number): Promise<Menu[] | undefined> {
+    return await this.loadMenu.load(id)
   }
 }

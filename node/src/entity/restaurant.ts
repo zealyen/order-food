@@ -1,7 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, Index, ManyToOne } from 'typeorm'
 import { Order, StoreBrand } from '@/entity'
 
-export class GPSPointInput {
+export class GPSPoint {
   x: number
   y: number
 }
@@ -19,7 +19,7 @@ export class Restaurant extends BaseEntity {
 
   @Column({ type: 'point', spatialFeatureType: 'Point', srid: 4326, nullable: false })
   @Index('geolocation', { spatial: true })
-    geolocation: GPSPointInput
+    geolocation: GPSPoint
 
   @CreateDateColumn()
     createdAt: Date

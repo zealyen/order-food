@@ -22,7 +22,7 @@ export class Order1694320747217 implements MigrationInterface {
           name: 'state',
           isNullable: false,
           type: 'enum',
-          enum: ['QUEUE', 'IN_PROGRESS', 'COMPLETED', 'CANCELED'],
+          enum: ['QUEUE', 'IN_PROGRESS', 'TOOK', 'COMPLETED', 'CANCELED'],
           default: '"QUEUE"',
         },
         {

@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { mysql } from '@/lib/mysql'
 import { createLoggerByFilename } from '@/lib/logger'
 import { getPagination, type PageConnection } from '@/lib/pagination'

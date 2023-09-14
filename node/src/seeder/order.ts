@@ -19,11 +19,11 @@ export default async function seeder (): Promise<void> {
       userGeolocation: 'POINT(25053192 121607035)',
       deliveryPhone: '0987654321',
       deliveryName: 'Tom',
-      details: JSON.stringify(_.map(kfcMenus, menu => ({
+      details: _.map(kfcMenus, menu => ({
         productName: menu.productName,
         quantity: 1,
         price: menu.price,
-      }))),
+      })),
     })
 
     await mysql.manager.save(Order, order)

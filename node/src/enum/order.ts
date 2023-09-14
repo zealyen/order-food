@@ -1,6 +1,7 @@
 export enum OrderStatus {
   QUEUE = 'QUEUE',
   IN_PROGRESS = 'IN_PROGRESS',
+  TOOK = 'TOOK',
   COMPLETED = 'COMPLETED',
   CANCELED = 'CANCELED'
 }
